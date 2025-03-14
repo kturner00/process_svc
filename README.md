@@ -1,4 +1,4 @@
-# process_svc_v2.0
+# process_svc-v2.1
 
 ## Brief Description
 This package was built to read in raw above-water radiometry data collected by a Spectra Vista Corporation (SVC) HR-512i spectroradiometer. The package consists of 4 core MATLAB functions and the three component (3C) Python model produced by Groetsch et al. 2017 and available on Philipp Grötsch’s GitLab page (rrs_model_3C). The packages are designed to read in SVC files (.sig) that include raw radiance scans, and through several functions generate quality controlled remote-sensing reflectance (*Rrs*) spectra. Specific components of each function are described in the header information (comments) of each .m file. The four MATLAB functions are as follows:
@@ -15,7 +15,7 @@ The data structure generated from *process_svc_readfiles.m* is used, along with 
 The data structure generated from *process_svc_rrs.m* is used as input, along with the path (location) to write .csv data files, station IDs and header information used by 3C (e.g., Rg, secchi, wind speed). This function does not provide any data processing or analysis, it only renders input files in the appropriate format for the *3C_process_svc.py* script. An important note on station IDs – this function will run without them, and auto-generate a generic ID in numeric order. We highly recommend providing your own to easily link this data back to your other datasets.
 
 ## process_svc_3Coutput.m
-The data structure generated from *process_svc_rrs.m* is used as input, along with the location of the output files generated from the *3C_process_svc.py* script and station IDs (again, will resort to generic IDs if none are provided). This function does not provide any data processing or analysis, it only populates the data structure with 3C generated Rrs spectra, matched to the corresponding station ID.
+The data structure generated from *process_svc_rrs.m* is used as input, along with the location of the output files generated from the *3C_process_svc.py* script and station IDs (again, will resort to generic IDs if none are provided). This function populates the data structure with 3C generated Rrs spectra, matched to the corresponding station ID. Finally, the function calculates two spectral QA/QC metrics: the Quality Water Index Polynomial (QWIP) score (Dierssen et al., 2022) and the "Wei" QA score (Wei et al., 2016) for the final 3C calculated Rrs spectra.
 
 ## Inputs and Outputs
 Inputs and outputs are defined as part of each function and can be viewed with *help ‘function_name’* in the MATLAB console (be sure to add the functions to your MATLAB directory).
@@ -36,3 +36,6 @@ Groetsch, Philipp. (2017). Python implementation of the 3C Water Surface Reflect
 
 Mobley, C. D. (1999). Estimation of the remote-sensing reflectance from above-surface measurements. Applied optics, 38(36), 7442-7455.
 
+Dierssen, H. M., Vandermeulen, R. A., Barnes, B. B., Castagna, A., Knaeps, E., & Vanhellemont, Q. (2022). QWIP: A Quantitative Metric for Quality Control of Aquatic Reflectance Spectral Shape Using the Apparent Visible Wavelength. Frontiers in Remote Sensing. 3:869611. DOI: 10.3389/frsen.2022.869611.
+
+Wei, J., Lee, Z., & Shang, S. (2016). A system to measure the data quality of spectral remote-sensing reflectance of aquatic environments. Journal of Geophysical Research: Oceans, 121, 8189-8207, DOI: 10.1002/2016JC012126.

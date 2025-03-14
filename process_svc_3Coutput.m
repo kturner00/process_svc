@@ -16,7 +16,8 @@ function [svc_final] = process_svc_3Coutput(input_struct,input_path,station_ids)
 % Outputs:
 % --------
 %             svc_final : structure array from process_svc_rrs, updated
-%                         with Rrs values calculated using 3C
+%                         with Rrs values calculated using 3C and QA/QC
+%                         metrics
 %
 % -------------------------------------------------------------------------
 
@@ -45,12 +46,12 @@ end
 % Get 3C output file names from input directory
 % ---------------------------------------------
 contents = dir(input_path);
-files = char([]);
+files = string([]);
 
 for ii = 1:length(contents)
 
     if ~strcmp(contents(ii).name(1),'.') % removes "hidden" contents
-        files = [files; char(contents(ii).name)];
+        files = [files; string(contents(ii).name)];
     end
 
 end
@@ -61,8 +62,9 @@ file_ids = string([]);
 
 for ii = 1:size(files,1)
 
-    uidx = strfind(files(ii,:),'_');
-    file_ids(ii) = string(files(ii,1:max(uidx)-1));
+    file_char = char(files(ii));
+    uidx = strfind(file_char,'_');
+    file_ids(ii) = string(file_char(1:max(uidx)-1));
 
 end
 
@@ -81,7 +83,9 @@ for ii=1:length(input_struct)
     svc_final(ii).station_id = station_ids(ii);
 
     for jj = 1:length(fn)
+
         svc_final(ii).(fn{jj}) = input_struct(ii).(fn{jj});
+        
     end
 
     idx = find(strcmp(file_ids,svc_final(ii).station_id));
@@ -94,6 +98,24 @@ for ii=1:length(input_struct)
 
     end
     
+end
+
+% Calculate Quality Water Index Polynomial (QWIP) score (Dierssen et al., 
+% 2022) and Wei QA score (Wei et al., 2016) for 3C spectra in final output
+% structure
+% ------------------------------------------------------------------------
+for ii = 1:length(svc_final)
+    
+    [qwip_3c,~] = qwip_score(svc_final(ii).rrs_3C,svc_final(ii).rrs_wave_3C);
+    svc_final(ii).qwip_score_3C = qwip_3c;
+
+    for jj = 1:size(svc_final(ii).rrs_3C,2)
+
+        [~,~,~,wei_3c] = QAscores(svc_final(ii).rrs_3C(:,jj)',svc_final(ii).rrs_wave_3C(:,jj)');
+        svc_final(ii).wei_score_3C(jj) = wei_3c;
+
+    end
+
 end
 
 end

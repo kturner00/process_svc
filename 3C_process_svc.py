@@ -44,8 +44,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 # identifying file paths
 # change 'your_name' to your user profile name (current path written for Macs)
 
-mypath='/Users/your_name/Documents/svc_data_folder/3C_input/'
-outpath='/Users/your_name/Documents/svc_data_folder/3C_output/'
+mypath='/Users/kyleturner/Dropbox/Shared/NASA_IDS_LIS_Project/5_LIS_FieldWork/Data_Raw/SVC/LS_220613_SVC/3C_input/'
+outpath='/Users/kyleturner/Dropbox/Shared/NASA_IDS_LIS_Project/5_LIS_FieldWork/Data_Raw/SVC/LS_220613_SVC/3C_output/'
 
 
 from os import listdir
@@ -61,7 +61,7 @@ for i in onlyfiles:
 
 	class rrs_model_3C(object):
 
-		def __init__(self, downsampling=False, wl_range = False, spectra_path = '/Users/your_name/Documents/process-svc-v2.0/rrs_model_3C-master/spectra/'):
+		def __init__(self, downsampling=False, wl_range = False, spectra_path = '/Users/kyleturner/Dropbox/My_Box/Code/M_Files/process_svc_v2p1/rrs_model_3C-master/spectra/'):
 			""" 
 			spectra_path -- path to input spectra 
 			downsampling -- reduce spectral resolution (False or window_length for rolling_mean)
